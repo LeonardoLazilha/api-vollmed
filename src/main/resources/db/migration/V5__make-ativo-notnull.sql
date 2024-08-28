@@ -1,0 +1,1 @@
+ALTER TABLE medicos MODIFY ativo TINYINT NOT NULL;

@@ -1,4 +1,6 @@
-package voll.med.api_med.domain.paciente;
+package voll.med.api_med.domain.paciente.dto;
+
+import voll.med.api_med.domain.paciente.Paciente;
 
 public record PacienteListagemDTO(Long id, String nome, String email, String cpf, Boolean ativo) {
 

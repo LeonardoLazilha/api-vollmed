@@ -1,6 +1,7 @@
-package voll.med.api_med.domain.paciente;
+package voll.med.api_med.domain.paciente.dto;
 
 import voll.med.api_med.domain.endereco.Endereco;
+import voll.med.api_med.domain.paciente.Paciente;
 
 public record PacienteDetalhamentoDTO(
         Long id, String email, String nome, String telefone,

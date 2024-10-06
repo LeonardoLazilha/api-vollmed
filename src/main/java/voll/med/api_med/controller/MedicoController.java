@@ -11,9 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import voll.med.api_med.domain.medico.Medico;
-import voll.med.api_med.domain.medico.MedicoListagemDTO;
+import voll.med.api_med.domain.medico.dto.MedicoAtualizacaoDTO;
+import voll.med.api_med.domain.medico.dto.MedicoDTO;
+import voll.med.api_med.domain.medico.dto.MedicoDetalhamentoDTO;
+import voll.med.api_med.domain.medico.dto.MedicoListagemDTO;
 import voll.med.api_med.domain.medico.MedicoRepository;
-import voll.med.api_med.domain.medico.*;
 
 @RestController
 @RequestMapping("/medicos")

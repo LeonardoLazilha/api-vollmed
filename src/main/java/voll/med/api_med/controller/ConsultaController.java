@@ -11,7 +11,7 @@ import voll.med.api_med.domain.consulta.AgendamentoConsultaDTO;
 import voll.med.api_med.domain.consulta.AgendamentoConsultaDetalhamentoDTO;
 
 @RestController
-@RequestMapping
+@RequestMapping("/consulta")
 public class ConsultaController {
 
     @PostMapping

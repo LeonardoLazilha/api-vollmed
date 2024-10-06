@@ -1,4 +1,4 @@
-package voll.med.api_med.domain.consulta;
+package voll.med.api_med.domain.consulta.dto;
 
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;

@@ -1,9 +1,11 @@
 package voll.med.api_med.domain.consulta;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import voll.med.api_med.domain.ValidacaoException;
 import voll.med.api_med.domain.consulta.dto.AgendamentoConsultaDTO;
+import voll.med.api_med.domain.consulta.dto.AgendamentoConsultaDetalhamentoDTO;
 import voll.med.api_med.domain.consulta.validacoes.ValidadorAgendamentoDeConsulta;
 import voll.med.api_med.domain.medico.Medico;
 import voll.med.api_med.domain.medico.MedicoRepository;
@@ -18,10 +20,11 @@ public class AgendaDeConsultasService {
     private final MedicoRepository medicoRepository;
     private final PacienteRepository pacienteRepository;
 
+    @Autowired
     private List<ValidadorAgendamentoDeConsulta> validadores;
 
 
-    public void agendar(AgendamentoConsultaDTO dados) {
+    public AgendamentoConsultaDetalhamentoDTO agendar(AgendamentoConsultaDTO dados) {
         if (!pacienteRepository.existsById(dados.idPaciente())) {
             throw new ValidacaoException("Id do paciente não localizado.");
         }
@@ -34,9 +37,16 @@ public class AgendaDeConsultasService {
 
         var paciente = pacienteRepository.findById(dados.idPaciente()).get();
         var medico = escolherMedico(dados);
+
+        if (medico == null){
+            throw new ValidacaoException("Não existe médico disponível nessa data");
+        }
+
         var consulta = new Consulta(null, medico, paciente, dados.data());
 
         consultaRepository.save(consulta);
+
+        return new AgendamentoConsultaDetalhamentoDTO(consulta);
     }
 
     private Medico escolherMedico(AgendamentoConsultaDTO dados) {

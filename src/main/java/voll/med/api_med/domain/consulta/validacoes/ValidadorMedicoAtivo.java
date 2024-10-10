@@ -1,10 +1,12 @@
 package voll.med.api_med.domain.consulta.validacoes;
 
+import org.springframework.stereotype.Component;
 import voll.med.api_med.domain.ValidacaoException;
 import voll.med.api_med.domain.consulta.dto.AgendamentoConsultaDTO;
 import voll.med.api_med.domain.medico.MedicoRepository;
 
-public class ValidadorMedicoAtivo {
+@Component
+public class ValidadorMedicoAtivo implements ValidadorAgendamentoDeConsulta {
 
     private MedicoRepository medicoRepository;
 

@@ -1,8 +1,8 @@
 package voll.med.api_med.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +13,7 @@ import voll.med.api_med.domain.consulta.dto.CancelamentoConsultaDTO;
 
 @RestController
 @RequestMapping("/consulta")
+@SecurityRequirement(name = "bearer-key")
 public class ConsultaController {
 
     @Autowired

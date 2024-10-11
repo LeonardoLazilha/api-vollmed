@@ -1,0 +1,2 @@
+ALTER TABLE consultas
+ADD COLUMN cancelada BOOLEAN DEFAULT false;

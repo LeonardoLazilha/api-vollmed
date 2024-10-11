@@ -1,12 +1,11 @@
 package voll.med.api_med.domain.consulta;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import voll.med.api_med.domain.ValidacaoException;
 import voll.med.api_med.domain.consulta.dto.AgendamentoConsultaDTO;
 import voll.med.api_med.domain.consulta.dto.AgendamentoConsultaDetalhamentoDTO;
-import voll.med.api_med.domain.consulta.validacoes.ValidadorAgendamentoDeConsulta;
+import voll.med.api_med.domain.consulta.validacoes.agendamento.ValidadorAgendamentoDeConsulta;
 import voll.med.api_med.domain.medico.Medico;
 import voll.med.api_med.domain.medico.MedicoRepository;
 import voll.med.api_med.domain.paciente.PacienteRepository;
@@ -19,10 +18,7 @@ public class AgendaDeConsultasService {
     private final ConsultaRepository consultaRepository;
     private final MedicoRepository medicoRepository;
     private final PacienteRepository pacienteRepository;
-
-    @Autowired
-    private List<ValidadorAgendamentoDeConsulta> validadores;
-
+    private final List<ValidadorAgendamentoDeConsulta> validadores;
 
     public AgendamentoConsultaDetalhamentoDTO agendar(AgendamentoConsultaDTO dados) {
         if (!pacienteRepository.existsById(dados.idPaciente())) {
@@ -42,7 +38,7 @@ public class AgendaDeConsultasService {
             throw new ValidacaoException("Não existe médico disponível nessa data");
         }
 
-        var consulta = new Consulta(null, medico, paciente, dados.data());
+        var consulta = new Consulta(medico, paciente, dados.data());
 
         consultaRepository.save(consulta);
 
@@ -59,6 +55,5 @@ public class AgendaDeConsultasService {
         }
 
         return medicoRepository.escolherMedicoAleatorioLivreNaData(dados.especialidade(), dados.data());
-
     }
 }

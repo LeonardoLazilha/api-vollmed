@@ -22,27 +22,27 @@ import voll.med.api_med.domain.medico.MedicoRepository;
 public class MedicoController {
 
     @Autowired
-    private MedicoRepository medicoRepository;
+    private MedicoRepository repository;
 
     @PostMapping
     @Transactional
     public ResponseEntity cadastrar (@RequestBody @Valid MedicoDTO dados, UriComponentsBuilder uriBuilder){
         var medico = new Medico(dados);
-        medicoRepository.save(medico);
+        repository.save(medico);
         var uri = uriBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();
         return ResponseEntity.created(uri).body(new MedicoDetalhamentoDTO(medico));
     }
 
     @GetMapping
     public ResponseEntity<Page<MedicoListagemDTO>> listar(@PageableDefault(size = 20, page = 0, sort = {"nome"}) Pageable paginacao){
-        var page = medicoRepository.findAllByAtivoTrue(paginacao).map(MedicoListagemDTO::new);
+        var page = repository.findAllByAtivoTrue(paginacao).map(MedicoListagemDTO::new);
         return ResponseEntity.ok(page);
     }
 
     @PutMapping
     @Transactional
     public ResponseEntity atualizar(@RequestBody @Valid MedicoAtualizacaoDTO dados){
-        var medico = medicoRepository.getReferenceById(dados.id());
+        var medico = repository.getReferenceById(dados.id());
         if (medico.getAtivo()){
             medico.atualizarInformacoes(dados);
             return ResponseEntity.ok(new MedicoDetalhamentoDTO(medico));
@@ -56,7 +56,7 @@ public class MedicoController {
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity excluir(@PathVariable Long id){
-        var medico = medicoRepository.getReferenceById(id);
+        var medico = repository.getReferenceById(id);
         medico.inativar();
 
         return ResponseEntity.noContent().build();
@@ -64,7 +64,7 @@ public class MedicoController {
 
     @GetMapping("/{id}")
     public ResponseEntity detalhar(@PathVariable Long id) {
-        var medico = medicoRepository.getReferenceById(id);
+        var medico = repository.getReferenceById(id);
         if (medico.getAtivo()) {
             return ResponseEntity.ok(new MedicoDetalhamentoDTO(medico));
         } else {

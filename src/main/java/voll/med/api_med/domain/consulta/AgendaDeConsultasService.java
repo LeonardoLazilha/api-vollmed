@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import voll.med.api_med.domain.ValidacaoException;
 import voll.med.api_med.domain.consulta.dto.AgendamentoConsultaDTO;
-import voll.med.api_med.domain.consulta.validacoes.ValidadorAgendamentoDeConsulta;
+import voll.med.api_med.domain.consulta.dto.AgendamentoConsultaDetalhamentoDTO;
+import voll.med.api_med.domain.consulta.validacoes.agendamento.ValidadorAgendamentoDeConsulta;
 import voll.med.api_med.domain.medico.Medico;
 import voll.med.api_med.domain.medico.MedicoRepository;
 import voll.med.api_med.domain.paciente.PacienteRepository;
@@ -17,11 +18,9 @@ public class AgendaDeConsultasService {
     private final ConsultaRepository consultaRepository;
     private final MedicoRepository medicoRepository;
     private final PacienteRepository pacienteRepository;
+    private final List<ValidadorAgendamentoDeConsulta> validadores;
 
-    private List<ValidadorAgendamentoDeConsulta> validadores;
-
-
-    public void agendar(AgendamentoConsultaDTO dados) {
+    public AgendamentoConsultaDetalhamentoDTO agendar(AgendamentoConsultaDTO dados) {
         if (!pacienteRepository.existsById(dados.idPaciente())) {
             throw new ValidacaoException("Id do paciente não localizado.");
         }
@@ -34,9 +33,16 @@ public class AgendaDeConsultasService {
 
         var paciente = pacienteRepository.findById(dados.idPaciente()).get();
         var medico = escolherMedico(dados);
-        var consulta = new Consulta(null, medico, paciente, dados.data());
+
+        if (medico == null){
+            throw new ValidacaoException("Não existe médico disponível nessa data");
+        }
+
+        var consulta = new Consulta(medico, paciente, dados.data());
 
         consultaRepository.save(consulta);
+
+        return new AgendamentoConsultaDetalhamentoDTO(consulta);
     }
 
     private Medico escolherMedico(AgendamentoConsultaDTO dados) {
@@ -49,6 +55,5 @@ public class AgendaDeConsultasService {
         }
 
         return medicoRepository.escolherMedicoAleatorioLivreNaData(dados.especialidade(), dados.data());
-
     }
 }

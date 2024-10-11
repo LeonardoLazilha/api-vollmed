@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import voll.med.api_med.domain.consulta.validacoes.cancelamento.MotivoCancelamento;
 import voll.med.api_med.domain.medico.Medico;
 import voll.med.api_med.domain.paciente.Paciente;
 
@@ -33,4 +34,20 @@ public class Consulta {
 
     private LocalDateTime data;
 
+    private Boolean cancelada;
+
+    @Enumerated(EnumType.STRING)
+    MotivoCancelamento motivoCancelamento;
+
+    public Consulta(Medico medico, Paciente paciente, LocalDateTime data) {
+        this.medico = medico;
+        this.paciente = paciente;
+        this.data = data;
+        this.cancelada = false;
+    }
+
+    public void cancelar(MotivoCancelamento motivoCancelamento) {
+        this.cancelada = true;
+        this.motivoCancelamento = motivoCancelamento;
+    }
 }

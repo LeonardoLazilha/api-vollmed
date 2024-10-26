@@ -8,9 +8,9 @@ import org.springframework.test.context.ActiveProfiles;
 
 
 @DataJpaTest
-@ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class xMedicoRepositoryTest {
+@ActiveProfiles("test")
+class MedicoRepositoryTest {
 
     @Test
     void escolherMedicoAleatorioLivreNaData() {
